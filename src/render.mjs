@@ -9,7 +9,7 @@ import { execFileSync } from 'node:child_process';
 import { join } from 'node:path';
 import { tmpdir } from 'node:os';
 import { pathToFileURL } from 'node:url';
-import { DAY, LEADS, STORIES, TICKER, DATE_CHECK, FOOTER } from './data.mjs';
+import { DAY, LEADS, STORIES, TICKER, DATE_CHECK, PINS, TIMELINE, FOOTER } from './data.mjs';
 
 const CHROME =
   process.env.CHROME_PATH ?? 'C:/Program Files/Google/Chrome/Application/chrome.exe';
@@ -33,6 +33,31 @@ const brief = (s) => `
     <div class="src">${esc(s.source)}</div>
   </article>`;
 
+// A flat world silhouette in a 1000x500 box: continents as simplified polygons, enough to read as a
+// map at this size and small enough to stay inline. The pins sit on top in the same coordinate space.
+const WORLD = `
+<svg viewBox="0 0 1000 500" preserveAspectRatio="none" class="worldmap">
+  <rect width="1000" height="500" fill="#e6dcc8"/>
+  <g fill="#c9bda4" stroke="#a99a7e" stroke-width="1">
+    <path d="M120,120 L210,95 L280,110 L300,160 L275,205 L250,235 L215,250 L185,235 L165,195 L140,170 Z"/>
+    <path d="M255,250 L300,240 L325,275 L318,330 L295,395 L270,430 L250,405 L245,350 L235,300 Z"/>
+    <path d="M455,110 L500,95 L540,105 L560,130 L545,155 L515,165 L485,155 L465,135 Z"/>
+    <path d="M470,175 L530,170 L560,205 L555,260 L530,320 L505,375 L480,395 L465,350 L455,285 L450,225 Z"/>
+    <path d="M555,105 L640,90 L740,100 L820,120 L870,155 L860,200 L820,215 L775,200 L735,225 L700,210 L660,220 L620,195 L585,165 L565,135 Z"/>
+    <path d="M690,240 L740,235 L760,270 L745,310 L715,320 L690,290 Z"/>
+    <path d="M845,290 L895,285 L910,315 L890,345 L855,335 Z"/>
+    <path d="M300,105 L360,98 L380,118 L350,132 L310,128 Z"/>
+  </g>
+  ${PINS.map(
+    (p) => `
+  <g>
+    <circle cx="${p.x * 10}" cy="${p.y * 5}" r="9" fill="#8c1d1d" stroke="#f4efe4" stroke-width="2"/>
+    <text x="${p.x * 10}" y="${p.y * 5 + 3.4}" text-anchor="middle" font-size="9"
+          font-family="Segoe UI, Arial, sans-serif" font-weight="700" fill="#f4efe4">${p.no}</text>
+  </g>`
+  ).join('')}
+</svg>`;
+
 const html = `<!doctype html>
 <html lang="en"><head><meta charset="utf-8">
 <style>
@@ -42,86 +67,98 @@ const html = `<!doctype html>
     background: #f4efe4; color: #12233d;
     font-family: Georgia, "Times New Roman", serif;
     -webkit-font-smoothing: antialiased;
-    padding: 14px 18px 12px;
+    padding: 12px 16px 10px;
     display: flex; flex-direction: column;
   }
   .masthead {
     display: flex; justify-content: space-between; align-items: baseline;
-    border-bottom: 3px solid #12233d; padding-bottom: 5px;
+    border-bottom: 3px solid #12233d; padding-bottom: 4px;
     font-family: "Segoe UI", Arial, sans-serif; font-weight: 700;
-    font-size: 10px; letter-spacing: .17em; text-transform: uppercase;
+    font-size: 9.5px; letter-spacing: .17em; text-transform: uppercase;
   }
-  .masthead .right { font-weight: 600; letter-spacing: .1em; color: #4a5a72; font-size: 9px; }
+  .masthead .right { font-weight: 600; letter-spacing: .1em; color: #4a5a72; font-size: 8.5px; }
   h1 {
-    font-size: 54px; line-height: 1; letter-spacing: -.022em; font-weight: 700;
-    margin: 7px 0 5px; text-align: center; white-space: nowrap;
+    font-size: 46px; line-height: 1; letter-spacing: -.022em; font-weight: 700;
+    margin: 6px 0 4px; text-align: center; white-space: nowrap;
   }
   .standfirst {
-    font-style: italic; font-size: 12.5px; text-align: center; color: #2c3c56;
-    margin: 0 0 7px;
+    font-style: italic; font-size: 11px; text-align: center; color: #2c3c56; margin: 0 0 6px;
   }
   .ticker {
-    display: flex; border-top: 2.5px solid #12233d; border-bottom: 2.5px solid #12233d;
-    background: #ece4d4; margin-bottom: 11px;
+    display: flex; border-top: 2px solid #12233d; border-bottom: 2px solid #12233d;
+    background: #ece4d4; margin-bottom: 8px;
   }
-  .tick { flex: 1; padding: 6px 4px; text-align: center; border-right: 1px solid #c3b79f; }
+  .tick { flex: 1; padding: 4px 3px; text-align: center; border-right: 1px solid #c3b79f; }
   .tick:last-child { border-right: 0; }
-  .tick b { display: block; font-size: 19px; line-height: 1; letter-spacing: -.012em; }
+  .tick b { display: block; font-size: 15px; line-height: 1; letter-spacing: -.012em; }
   .tick span {
-    display: block; font-family: "Segoe UI", Arial, sans-serif; font-size: 7.4px;
-    letter-spacing: .05em; text-transform: uppercase; color: #4a5a72; margin-top: 3px;
-    line-height: 1.15;
+    display: block; font-family: "Segoe UI", Arial, sans-serif; font-size: 6.2px;
+    letter-spacing: .045em; text-transform: uppercase; color: #4a5a72; margin-top: 2px; line-height: 1.1;
   }
-  .leads { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 13px; margin-bottom: 10px; }
-  .lead { border-top: 4px solid #8c1d1d; padding-top: 6px; display: flex; flex-direction: column; }
+  .leads { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 8px; }
+  .lead { border-top: 3px solid #8c1d1d; padding-top: 4px; display: flex; flex-direction: column; }
   .lead-kicker {
-    font-family: "Segoe UI", Arial, sans-serif; font-size: 9px; font-weight: 700;
-    letter-spacing: .1em; text-transform: uppercase; color: #8c1d1d;
-    display: flex; align-items: center; gap: 6px; margin-bottom: 5px;
+    font-family: "Segoe UI", Arial, sans-serif; font-size: 7.6px; font-weight: 700;
+    letter-spacing: .09em; text-transform: uppercase; color: #8c1d1d;
+    display: flex; align-items: center; gap: 5px; margin-bottom: 3px;
   }
   .num {
     display: inline-flex; align-items: center; justify-content: center;
-    width: 17px; height: 17px; border-radius: 50%; background: #8c1d1d; color: #f4efe4;
-    font-size: 10px; font-weight: 700; letter-spacing: 0; flex: none;
+    width: 14px; height: 14px; border-radius: 50%; background: #8c1d1d; color: #f4efe4;
+    font-size: 8.5px; font-weight: 700; letter-spacing: 0; flex: none;
   }
-  .num.sm { width: 13px; height: 13px; font-size: 8px; background: #4a5a72; }
-  .tag { margin-left: auto; font-size: 7px; letter-spacing: .08em; color: #7b6f59; font-weight: 600; }
-  .lead h2 { font-size: 19px; line-height: 1.06; letter-spacing: -.014em; margin-bottom: 5px; }
-  .lead p { font-size: 10.8px; line-height: 1.33; color: #24334b; }
+  .num.sm { width: 11px; height: 11px; font-size: 6.6px; background: #4a5a72; }
+  .tag { margin-left: auto; font-size: 6px; letter-spacing: .07em; color: #7b6f59; font-weight: 600; }
+  .lead h2 { font-size: 15.5px; line-height: 1.06; letter-spacing: -.014em; margin-bottom: 3px; }
+  .lead p { font-size: 8.8px; line-height: 1.3; color: #24334b; }
   .src {
-    font-family: "Segoe UI", Arial, sans-serif; font-size: 7.4px; letter-spacing: .045em;
-    color: #7b6f59; margin-top: auto; padding-top: 5px; text-transform: uppercase;
+    font-family: "Segoe UI", Arial, sans-serif; font-size: 6px; letter-spacing: .04em;
+    color: #7b6f59; margin-top: auto; padding-top: 3px; text-transform: uppercase;
   }
-  .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px 15px; flex: 1; align-content: start; }
-  .brief { border-top: 1.5px solid #b9ad95; padding-top: 6px; display: flex; flex-direction: column; }
+  .body { display: grid; grid-template-columns: 1fr 232px; gap: 10px; flex: none; height: 752px; overflow: hidden; }
+  .grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px 9px; align-content: start; overflow: hidden; }
+  .brief { border-top: 1px solid #b9ad95; padding-top: 2px; display: flex; flex-direction: column; }
   .brief-kicker {
-    font-family: "Segoe UI", Arial, sans-serif; font-size: 8px; font-weight: 700;
-    letter-spacing: .075em; text-transform: uppercase; color: #4a5a72;
-    display: flex; align-items: center; gap: 5px; margin-bottom: 4px;
+    font-family: "Segoe UI", Arial, sans-serif; font-size: 6.1px; font-weight: 700;
+    letter-spacing: .06em; text-transform: uppercase; color: #4a5a72;
+    display: flex; align-items: center; gap: 4px; margin-bottom: 2px;
   }
-  .brief h3 { font-size: 13px; line-height: 1.1; letter-spacing: -.01em; margin-bottom: 4px; }
-  .brief p { font-size: 9.6px; line-height: 1.32; color: #33415a; }
-  .brief .src { font-size: 7px; padding-top: 4px; }
-  .check {
-    margin-top: auto; border: 2px solid #8c1d1d; padding: 8px 11px;
-    background: #f0e7d6; display: flex; gap: 14px;
+  .brief h3 { font-size: 8.9px; line-height: 1.06; letter-spacing: -.008em; margin-bottom: 2px; }
+  .brief p { font-size: 6.8px; line-height: 1.19; color: #33415a; }
+  .brief .src { font-size: 5.4px; padding-top: 2px; }
+  .rail { display: flex; flex-direction: column; gap: 8px; min-height: 0; }
+  .panel { border: 1.5px solid #b9ad95; background: #efe7d7; padding: 5px 6px; }
+  .panel h4 {
+    font-family: "Segoe UI", Arial, sans-serif; font-size: 7.2px; font-weight: 800;
+    letter-spacing: .1em; text-transform: uppercase; color: #8c1d1d; margin-bottom: 4px;
   }
+  .worldmap { width: 100%; height: auto; display: block; border: 1px solid #b9ad95; }
+  .timeline { list-style: none; }
+  .timeline li {
+    display: grid; grid-template-columns: 30px 1fr; gap: 4px;
+    font-size: 6.9px; line-height: 1.2; padding: 1.6px 0; border-bottom: 1px dotted #c9bda4;
+  }
+  .timeline li:last-child { border-bottom: 0; }
+  .timeline b {
+    font-family: "Segoe UI", Arial, sans-serif; font-size: 6.4px; font-weight: 700;
+    color: #8c1d1d; letter-spacing: .02em;
+  }
+  .check { border: 1.5px solid #8c1d1d; background: #f0e7d6; padding: 5px 6px; margin-top: auto; }
   .check h4 {
-    font-family: "Segoe UI", Arial, sans-serif; font-size: 9px; font-weight: 800;
-    letter-spacing: .1em; text-transform: uppercase; color: #8c1d1d;
-    white-space: nowrap; padding-top: 2px;
+    font-family: "Segoe UI", Arial, sans-serif; font-size: 7.2px; font-weight: 800;
+    letter-spacing: .1em; text-transform: uppercase; color: #8c1d1d; margin-bottom: 3px;
   }
-  .check .kept { font-size: 9.4px; line-height: 1.3; color: #12233d; margin-bottom: 3px; }
+  .check .kept { font-size: 6.6px; line-height: 1.24; color: #12233d; margin-bottom: 2px; }
   .check ul { list-style: none; }
-  .check li { font-size: 8.2px; line-height: 1.3; color: #4a5a72; }
-  .check li::before { content: "\\2715  "; color: #8c1d1d; font-weight: 700; }
+  .check li { font-size: 6.1px; line-height: 1.22; color: #4a5a72; }
+  .check li::before { content: "\\2715 "; color: #8c1d1d; font-weight: 700; }
   footer {
-    margin-top: 7px; border-top: 2.5px solid #12233d; padding-top: 5px;
-    display: flex; justify-content: space-between; gap: 16px;
+    margin-top: auto; flex: none; border-top: 2px solid #12233d; padding-top: 4px;
+    display: flex; justify-content: space-between; gap: 14px;
     font-family: "Segoe UI", Arial, sans-serif;
   }
-  footer .rule { font-size: 8.4px; color: #8c1d1d; font-weight: 700; letter-spacing: .04em; }
-  footer .sources { font-size: 7px; color: #7b6f59; letter-spacing: .03em; text-align: right; }
+  footer .rule { font-size: 7.2px; color: #8c1d1d; font-weight: 700; letter-spacing: .03em; }
+  footer .sources { font-size: 6.2px; color: #7b6f59; letter-spacing: .02em; text-align: right; }
 </style></head>
 <body>
   <div class="masthead">
@@ -140,13 +177,24 @@ const html = `<!doctype html>
 
   <div class="leads">${LEADS.map(lead).join('')}</div>
 
-  <div class="grid">${STORIES.map(brief).join('')}</div>
-
-  <div class="check">
-    <h4>Date check</h4>
-    <div>
-      <div class="kept">&#10003; ${esc(DATE_CHECK.kept)}</div>
-      <ul>${DATE_CHECK.dropped.map((d) => `<li>${esc(d)}</li>`).join('')}</ul>
+  <div class="body">
+    <div class="grid">${STORIES.map(brief).join('')}</div>
+    <div class="rail">
+      <div class="panel">
+        <h4>Where it happened</h4>
+        ${WORLD}
+      </div>
+      <div class="panel">
+        <h4>The day, by the clock (UTC)</h4>
+        <ul class="timeline">
+          ${TIMELINE.map((t) => `<li><b>${esc(t.time)}</b><span>${esc(t.text)}</span></li>`).join('')}
+        </ul>
+      </div>
+      <div class="check">
+        <h4>Date check</h4>
+        <div class="kept">&#10003; ${esc(DATE_CHECK.kept)}</div>
+        <ul>${DATE_CHECK.dropped.map((d) => `<li>${esc(d)}</li>`).join('')}</ul>
+      </div>
     </div>
   </div>
 

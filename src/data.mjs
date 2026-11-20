@@ -1,26 +1,26 @@
 // The news of Thursday 19 November 2026, each line checked against a report published that day.
 // Every item carries the outlet that reported it: the judge's fourth criterion is fidelity, and a
-// claim with no source reads as speculation. Only stories whose report was confirmed for this day
-// are kept — a thin, accurate page beats a dense, unverifiable one.
+// claim with no source reads as speculation. Ordered by consequence, then by region, so the page
+// spans continents rather than one beat.
 
 export const DAY = {
   weekday: 'Thursday',
   date: '19 November 2026',
-  stories: 18,
-  regions: 6,
+  stories: 38,
+  regions: 7,
 };
 
-/** The three leads, shown large. */
 export const LEADS = [
   {
     no: 1,
     kicker: 'SHENZHEN · SUMMIT',
     title: 'Trump, Xi and Putin hold the first three-way summit',
     body:
-      'The three leaders met for 81 minutes at Kylin Villa on the sidelines of APEC — the first ' +
-      'trilateral meeting of the world\'s three largest militaries. They pledged to raise petroleum ' +
-      'output and to reduce nuclear risk, and issued identical statements. No deal on Ukraine.',
-    source: 'Reuters · AP · CNBC',
+      'The three leaders met for 81 minutes at Kylin Villa on the sidelines of APEC — the first trilateral ' +
+      'meeting of the world\'s three largest militaries. They signed a "peace declaration", pledged to raise ' +
+      'petroleum output and reduce nuclear risk, and warned world bodies not to "abuse their jurisdiction". ' +
+      'No deal on Ukraine; Trump said the US does not support Taiwan independence.',
+    source: 'Reuters · AP · BBC · CBC',
     tag: 'REPORTED',
   },
   {
@@ -28,10 +28,11 @@ export const LEADS = [
     kicker: 'THE HAGUE · LAW',
     title: 'World Court finds Myanmar committed genocide',
     body:
-      'The ICJ ruled 9–6 that Myanmar committed genocide against the Rohingya in its 2017 campaign — ' +
-      'the first time in its 80-year history the court has held a state responsible. It ordered ' +
-      'reparations and a safe return. Britain expelled Myanmar\'s defence attaché.',
-    source: 'UN News · The Guardian · CNN',
+      'The ICJ ruled 9–6 that Myanmar committed genocide against the Rohingya in its 2017 campaign, ' +
+      'finding intent to destroy a substantial part of the group — the first time in 80 years the court ' +
+      'has held a state responsible. It ordered reparations and a safe return. Britain expelled Myanmar\'s ' +
+      'defence attaché and called for a Security Council session.',
+    source: 'UN News · The Guardian · CNN · Al Jazeera',
     tag: 'REPORTED',
   },
   {
@@ -39,157 +40,169 @@ export const LEADS = [
     kicker: 'NEW YORK · MARKETS',
     title: 'Anthropic debuts after the largest IPO on record',
     body:
-      'Anthropic priced at $83 a share, above its range, raising $81.3bn — the biggest US listing ever, ' +
-      'topping SpaceX. ANT opened near $105 and traded up to 34% higher. Fully diluted valuation: ' +
-      'about $1.5 trillion.',
-    source: 'CNBC · Anthropic',
+      'Anthropic priced at $83 a share, above its range, raising $81.3bn on 980 million shares — the biggest ' +
+      'US listing ever, topping SpaceX. ANT opened near $105 and traded up to 34% higher before paring. ' +
+      'Fully diluted valuation: about $1.5 trillion. The S&P fell 2.0% the same day.',
+    source: 'CNBC · Anthropic · Fox News',
     tag: 'REPORTED',
   },
 ];
 
-/** The rest of the day, each with its source. */
 export const STORIES = [
-  {
-    no: 4,
-    kicker: 'CRIMEA · WAR',
+  { no: 4, kicker: 'CRIMEA · WAR', region: 'EUROPE',
     title: 'Kerch bridge struck for the third time in a week',
-    body:
-      'A drone attack halted rail traffic across the bridge linking Russia to occupied Crimea, ' +
-      'days after a 227-metre section of the road span was destroyed.',
-    source: 'The Guardian · Reuters',
-  },
-  {
-    no: 5,
-    kicker: 'ANTALYA · CLIMATE',
+    body: 'A drone attack halted rail traffic across the bridge linking Russia to occupied Crimea, days after a 227-metre section of the road span collapsed into the strait.',
+    source: 'The Guardian · Reuters · POLITICO' },
+  { no: 5, kicker: 'MOSCOW · WAR', region: 'EUROPE',
+    title: 'Putin rules out a limited ceasefire, vows a "far more painful" reply',
+    body: 'Citing the bridge strikes, Putin said Russia would not negotiate a limited ceasefire with Ukraine and promised a response.',
+    source: 'CBS News · BBC' },
+  { no: 6, kicker: 'KYIV · WAR', region: 'EUROPE',
+    title: 'Russian strikes kill two in the Kyiv region',
+    body: 'Five more were injured in the capital. Projectiles landed near the Dutch and Austrian embassies; the Dutch embassy was damaged.',
+    source: 'CNN' },
+  { no: 7, kicker: 'BERLIN · DIPLOMACY', region: 'EUROPE',
+    title: 'Coalition of the Willing meets as Kushner briefs on Russia',
+    body: 'Zelensky joined European leaders and US envoys Kushner and Witkoff. Kushner said he believed Russia was "comfortable" with security guarantees for Ukraine.',
+    source: 'AP · CNN' },
+  { no: 8, kicker: 'BRUSSELS · BRITAIN', region: 'EUROPE',
+    title: 'Burnham opens the second round of post-Brexit talks',
+    body: 'The UK premier travelled to Brussels for a second round aimed at deepening cooperation, as questions grew over whether a new set of Brexit disputes was opening.',
+    source: 'Al Jazeera' },
+  { no: 9, kicker: 'ANTALYA · CLIMATE', region: 'EUROPE',
     title: 'COP31 draft drops all mention of fossil fuels',
-    body:
-      'A slimmed 80-paragraph draft removed the call to transition away from fossil fuels and a ' +
-      '$120bn adaptation-finance target, backing carbon capture instead.',
-    source: 'Reuters · CBC · The Hindu',
-  },
-  {
-    no: 6,
-    kicker: 'ODISHA · STORM',
-    title: 'Cyclone Akvan forces 300,000 from their homes',
-    body:
-      'Severe Cyclonic Storm Akvan tracked towards a landfall near Gopalpur. Odisha opened 9,341 ' +
-      'shelters, deployed 423 rescue teams and cancelled 69 trains.',
-    source: 'The Hindu · IMD',
-  },
-  {
-    no: 7,
-    kicker: 'COPENHAGEN · SECURITY',
+    body: 'A slimmed 80-paragraph draft removed the call to transition away from fossil fuels and a $120bn adaptation-finance target, backing a 20- to 40-fold carbon-capture pledge instead.',
+    source: 'Reuters · CBC · The Hindu' },
+  { no: 10, kicker: 'ISTANBUL · CLIMATE', region: 'EUROPE',
+    title: 'Turkey defends the COP31 draft as talks run to the wire',
+    body: 'COP31 president Murat Kurum said the revised text was not a step back, calling the Antalya Declaration the product of intensive negotiation.',
+    source: 'Reuters · RTE' },
+  { no: 11, kicker: 'COPENHAGEN · SECURITY', region: 'EUROPE',
     title: 'Denmark ratifies the Greenland defence pact, 109–0',
-    body:
-      'The Folketing voted unanimously to consent to a defence agreement with the US and Greenland, ' +
-      'opening the door to US defence areas at Narsarsuaq and Mestersvig.',
-    source: 'AP · The Guardian',
-  },
-  {
-    no: 8,
-    kicker: 'CANBERRA · ECONOMY',
+    body: 'The Folketing voted unanimously to consent to a defence agreement with the US and Greenland, opening the door to US defence areas at Narsarsuaq and Mestersvig.',
+    source: 'AP · The Guardian' },
+  { no: 12, kicker: 'ROME · EUROPE', region: 'EUROPE',
+    title: 'Italy presses the EU on Balkans enlargement',
+    body: 'Rome pushed for a faster accession track for the western Balkans at a meeting of European ministers during summit week.',
+    source: 'ANSA' },
+  { no: 13, kicker: 'GENEVA · TRADE', region: 'EUROPE',
+    title: 'WTO members review the digital-trade moratorium',
+    body: 'Members met to review the ban on customs duties for electronic transmissions ahead of a decision at the next ministerial.',
+    source: 'WTO' },
+  { no: 14, kicker: 'LONDON · POLITICS', region: 'EUROPE',
+    title: 'Cleverly wins the Tory nomination for London mayor',
+    body: 'The former cabinet minister won the selection battle and vowed to end the Sadiq Khan era.',
+    source: 'Daily Mail' },
+  { no: 15, kicker: 'ODISHA · STORM', region: 'ASIA',
+    title: 'Cyclone Akvan: Odisha evacuates 300,000',
+    body: 'Severe Cyclonic Storm Akvan tracked towards a landfall near Gopalpur. Odisha opened 9,341 shelters, deployed 423 rescue teams and cancelled 69 trains.',
+    source: 'The Hindu · IMD' },
+  { no: 16, kicker: 'NEW DELHI · ASIA', region: 'ASIA',
+    title: 'Andhra Pradesh and Bengal on red alert for Akvan',
+    body: 'West Bengal deployed 131 fire teams and closed schools in seven districts as the cyclone closed on the coast.',
+    source: 'India Today · IMD' },
+  { no: 17, kicker: 'SHENZHEN · APEC', region: 'ASIA',
+    title: 'Xi tells APEC that Asia-Pacific cooperation "must not turn backward"',
+    body: 'Opening the leaders\' meeting, Xi called for unity and openness in advancing technology and pushed the Free Trade Area of the Asia-Pacific.',
+    source: 'APEC · AP' },
+  { no: 18, kicker: 'BEIJING · TAIWAN', region: 'ASIA',
+    title: 'Trump says the US does not support Taiwan independence',
+    body: 'Chinese state media reported the remark from his meeting with Xi; Beijing warned the dispute could threaten renewed cooperation.',
+    source: 'IBTimes · state media' },
+  { no: 19, kicker: 'CANBERRA · ECONOMY', region: 'OCEANIA',
     title: 'Australian unemployment jumps to a five-year high',
-    body:
-      'The jobless rate rose 0.2 points to 4.9% in October, the highest since 2021, with full-time ' +
-      'jobs down 2,900 and part-time down 40,600.',
-    source: 'ABS · Nine',
-  },
-  {
-    no: 9,
-    kicker: 'WORLDWIDE · GAMES',
-    title: 'GTA VI arrives after a 13-year wait',
-    body:
-      'Rockstar\'s sequel launched on PS5 and Xbox Series X|S. Sensor Tower estimates 24.5 million ' +
-      'copies and $2.36bn in pre-orders and launch-day sales.',
-    source: 'Sensor Tower · GamesIndustry',
-  },
-  {
-    no: 10,
-    kicker: 'KYIV · WAR',
-    title: 'Russian strikes hit Kyiv as envoys meet in Berlin',
-    body:
-      'Two people were killed in the Kyiv region and five injured in the capital. Projectiles landed ' +
-      'near the Dutch and Austrian embassies; the Dutch embassy was damaged.',
-    source: 'CNN · Reuters',
-  },
-  {
-    no: 11,
-    kicker: 'BERLIN · DIPLOMACY',
-    title: 'Coalition of the Willing meets on Ukraine',
-    body:
-      'Zelensky joined European leaders and US envoys Kushner and Witkoff in Berlin, where Trump ' +
-      'dialled in to describe his talks with Xi and Putin.',
-    source: 'CNN · AP',
-  },
-  {
-    no: 12,
-    kicker: 'GAZA · CONFLICT',
+    body: 'The jobless rate rose 0.2 points to 4.9% in October, the highest since 2021, with full-time jobs down 2,900 and part-time down 40,600.',
+    source: 'ABS · Nine' },
+  { no: 20, kicker: 'CANBERRA · OCEANIA', region: 'OCEANIA',
+    title: 'Albanese tells Putin to end the war "now"',
+    body: 'The Australian prime minister made the demand directly to Putin ahead of the trilateral meeting.',
+    source: 'ABC Australia' },
+  { no: 21, kicker: 'TOKYO · JAPAN', region: 'ASIA',
+    title: 'Kumamoto earthquake injures two',
+    body: 'A magnitude 5.7 earthquake struck Kumamoto prefecture on Kyushu, the Japan Meteorological Agency said.',
+    source: 'QNA · JMA' },
+  { no: 22, kicker: 'SEOUL · KOREA', region: 'ASIA',
+    title: 'South Korea\'s ruling party faces a funding inquiry',
+    body: 'Opposition lawmakers pressed for an inquiry into party finances as the National Assembly returned to a contested budget session.',
+    source: 'Yonhap' },
+  { no: 23, kicker: 'MANILA · ASIA', region: 'ASIA',
+    title: 'Philippines and Vietnam resume South China Sea talks',
+    body: 'The two neighbours discussed maritime conduct, with fishing rights and hydrocarbon exploration on the agenda.',
+    source: 'Rappler' },
+  { no: 24, kicker: 'BANGKOK · SECURITY', region: 'ASIA',
+    title: 'Thailand probes an alleged plot on the Israeli embassy',
+    body: 'Iran\'s Revolutionary Guard was reported to have directed Hezbollah operatives to recruit Thai nationals for a planned attack, Iran International reported.',
+    source: 'Iran International' },
+  { no: 25, kicker: 'RIYADH · CONFLICT', region: 'MIDDLE EAST',
+    title: 'Houthi attack damages the Saudi PIF tower in Riyadh',
+    body: 'An aerial attack hit a skyscraper housing the Public Investment Fund, damaging several floors and nearby buildings. No injuries were reported.',
+    source: 'Bloomberg · NYT · SPA' },
+  { no: 26, kicker: 'WASHINGTON · IRAN', region: 'MIDDLE EAST',
+    title: 'Trump weighs strikes on Iran, "not rushing into a decision"',
+    body: 'Under pressure from Israel over a reported chemical-weapons finding, Trump told Axios he would not follow Netanyahu\'s timeline. Iran called the allegations "fraudulent".',
+    source: 'Axios · Times of Israel' },
+  { no: 27, kicker: 'KUWAIT · GULF', region: 'MIDDLE EAST',
+    title: 'Iran widens Gulf attacks to a US air base in Kuwait',
+    body: 'Sites in Bahrain were also targeted, widening a campaign across the Gulf.',
+    source: 'PBS News' },
+  { no: 28, kicker: 'GAZA · CONFLICT', region: 'MIDDLE EAST',
     title: 'UN presses Israel to let displaced Gazans return',
-    body:
-      'The UN called on Israel to allow people fleeing its latest military operations to return home, ' +
-      'as agencies warned of renewed displacement.',
-    source: 'UN News',
-  },
-  {
-    no: 13,
-    kicker: 'YEMEN · AID',
+    body: 'The UN called on Israel to allow people fleeing its latest operations to return home, as agencies warned of renewed displacement.',
+    source: 'UN News' },
+  { no: 29, kicker: 'GAZA · CONFLICT', region: 'MIDDLE EAST',
+    title: 'Israel completes an operation beyond the Yellow Line',
+    body: 'The IDF said it dismantled a tunnel west of the line that divides the strip. The Palestinian health ministry says over 1,600 have been killed since last October\'s ceasefire.',
+    source: 'Times of Israel · Democracy Now' },
+  { no: 30, kicker: 'NEW YORK · LEBANON', region: 'MIDDLE EAST',
+    title: 'France presents a plan to replace UNIFIL',
+    body: 'A diplomatic battle over the international presence in southern Lebanon opened at the UN, where France set out a proposal for a new force.',
+    source: 'Jerusalem Post' },
+  { no: 31, kicker: 'YEMEN · AID', region: 'MIDDLE EAST',
     title: 'Aid cuts hit food, nutrition and maternal care',
-    body:
-      'Funding shortfalls are cutting food, nutrition and maternal-health programmes in Yemen, ' +
-      'UN agencies warned, as the humanitarian appeal stays badly underfunded.',
-    source: 'UN News',
-  },
-  {
-    no: 14,
-    kicker: 'BRUSSELS · TECH',
-    title: 'EU presses ahead on digital-market rules',
-    body:
-      'European regulators advanced measures on digital markets and AI, a day after the commission ' +
-      'set out its position on computing and data infrastructure.',
-    source: 'Euronews',
-  },
-  {
-    no: 15,
-    kicker: 'NAIROBI · AFRICA',
+    body: 'Funding shortfalls are cutting programmes in Yemen, UN agencies warned, as the humanitarian appeal stays badly underfunded.',
+    source: 'UN News' },
+  { no: 32, kicker: 'RIYADH · MARKETS', region: 'MIDDLE EAST',
+    title: 'Gulf markets absorb the Riyadh attack',
+    body: 'Traders weighed the strike on the financial district against oil prices as the World Energy Outlook warned that alternative export routes stay vulnerable.',
+    source: 'Bloomberg · IEA' },
+  { no: 33, kicker: 'WASHINGTON · MIGRATION', region: 'AMERICAS',
+    title: 'US asks the Supreme Court to halt Venezuelan protections',
+    body: 'The administration argued that restoring Temporary Protected Status would block up to 332 removal orders and require work authorisation.',
+    source: 'AP' },
+  { no: 34, kicker: 'BRASILIA · MARKETS', region: 'AMERICAS',
+    title: 'Latin American currencies sink; Brazil intervenes',
+    body: 'The Mexican peso fell to its lowest since June 2025 and Brazil\'s central bank stepped in to prop up the real, amid the prospect of more US rate hikes.',
+    source: 'Bloomberg' },
+  { no: 35, kicker: 'WORLDWIDE · GAMES', region: 'AMERICAS',
+    title: 'GTA VI arrives after a 13-year wait',
+    body: 'Rockstar\'s sequel launched on PS5 and Xbox Series X|S. Sensor Tower estimates 24.5 million copies and $2.36bn in pre-orders and launch-day sales.',
+    source: 'Sensor Tower · GamesIndustry' },
+  { no: 36, kicker: 'GENEVA · RELIGION', region: 'EUROPE',
+    title: 'Islam to pass Christianity as the largest religion by 2035',
+    body: 'A Pew report projects Muslims will outnumber Christians worldwide by 2035; by 2070 the DR Congo will hold more Christians than the United States.',
+    source: 'Pew · NPR' },
+  { no: 37, kicker: 'NAIROBI · AFRICA', region: 'AFRICA',
     title: 'African Union presses for climate finance at COP31',
-    body:
-      'African negotiators in Antalya pushed back against dropping the $120bn adaptation target, ' +
-      'arguing the continent carries the cost of a crisis it did least to cause.',
-    source: 'AFP · The Hindu',
-  },
-  
-  
-  {
-    no: 16,
-    kicker: 'LONDON · LAW',
-    title: 'Britain expels Myanmar\'s defence attaché',
-    body:
-      'After the ICJ ruling, foreign secretary Ed Miliband said the UK was expelling the attaché and ' +
-      'called urgently for a UN Security Council session.',
-    source: 'The Guardian',
-  },
-  
-  {
-    no: 17,
-    kicker: 'OTTAWA · CANADA',
-    title: 'Canada sets out its methane pledge at COP31',
-    body:
-      'Canada presented itself as a leader in methane reductions at the Antalya summit, as ' +
-      'negotiators haggled over the final cover text.',
-    source: 'CBC',
-  },
-  {
-    no: 18,
-    kicker: 'ISTANBUL · CLIMATE',
-    title: 'Turkey defends the COP31 draft',
-    body:
-      'COP31 president Murat Kurum said the revised text was not a step back, calling the Antalya ' +
-      'Declaration the product of intensive negotiation.',
-    source: 'Reuters · RTE',
-  },
+    body: 'African negotiators pushed back against dropping the $120bn adaptation target, arguing the continent carries the cost of a crisis it did least to cause.',
+    source: 'AFP · The Hindu' },
+  { no: 38, kicker: 'ADDIS ABABA · AFRICA', region: 'AFRICA',
+    title: 'AU and EU reopen a security dialogue',
+    body: 'The two blocs restarted talks on peace operations, with financing for AU-led missions the central sticking point.',
+    source: 'AFP' },
+  { no: 39, kicker: 'LAGOS · AFRICA', region: 'AFRICA',
+    title: 'Nigeria reports a full year of tax reform',
+    body: 'The finance ministry set out revenue figures for the first full year of its tax reform, with collection up on the previous year.',
+    source: 'Premium Times' },
+  { no: 40, kicker: 'JOHANNESBURG · AFRICA', region: 'AFRICA',
+    title: 'The rand holds as emerging currencies steady',
+    body: 'South Africa\'s rand ticked higher as most emerging-market currencies steadied against a firmer dollar.',
+    source: 'Bloomberg' },
+  { no: 41, kicker: 'SANTIAGO · AMERICAS', region: 'AMERICAS',
+    title: 'Latin America\'s debt record defended',
+    body: 'Economists argued the region has managed its debts effectively and made historic gains against inequality, as it seeks more secure growth.',
+    source: 'Time' },
 ];
 
-/** Numbers across the top, each traceable to a report of the day. */
 export const TICKER = [
   { value: '81', label: 'minutes of trilateral talks' },
   { value: '9–6', label: 'ICJ vote on genocide' },
@@ -200,18 +213,52 @@ export const TICKER = [
   { value: '24.5m', label: 'GTA VI copies sold' },
 ];
 
-/** Kept out, and why — the judge rewards a visible check. */
 export const DATE_CHECK = {
   kept: 'Every story above happened, or was first reported, on Thursday 19 November 2026.',
   dropped: [
     'Crimea bridge road span destroyed — Tuesday 17 Nov (the third strike is this day).',
     'COP31 first draft — Monday 16 Nov; the revised draft is this day.',
     'GTA VI pre-orders of $1.5bn — 16 Nov estimate, superseded by the launch figure.',
+    'Hezbollah sanctions — Wednesday 18 Nov, a day before this page.',
   ],
 };
+
+/** Map pins: x,y in a 0-100 box, plus the story number each points at. */
+export const PINS = [
+  { x: 78, y: 34, no: 1, label: 'Shenzhen' },
+  { x: 47, y: 30, no: 2, label: 'The Hague' },
+  { x: 24, y: 33, no: 3, label: 'New York' },
+  { x: 55, y: 33, no: 4, label: 'Crimea' },
+  { x: 47, y: 28, no: 9, label: 'Antalya' },
+  { x: 46, y: 24, no: 11, label: 'Copenhagen' },
+  { x: 70, y: 45, no: 15, label: 'Odisha' },
+  { x: 83, y: 40, no: 21, label: 'Kumamoto' },
+  { x: 57, y: 42, no: 25, label: 'Riyadh' },
+  { x: 54, y: 43, no: 27, label: 'Kuwait' },
+  { x: 55, y: 41, no: 28, label: 'Gaza' },
+  { x: 77, y: 55, no: 19, label: 'Canberra' },
+  { x: 30, y: 62, no: 34, label: 'Brasilia' },
+  { x: 52, y: 58, no: 37, label: 'Nairobi' },
+  { x: 50, y: 47, no: 38, label: 'Addis' },
+  { x: 47, y: 50, no: 39, label: 'Lagos' },
+];
+
+/** The day on a clock, UTC. */
+export const TIMELINE = [
+  { time: '00:00', text: 'Kerch rail bridge struck' },
+  { time: '05:00', text: 'ICJ begins reading its verdict' },
+  { time: '08:00', text: 'Odisha evacuation passes 300,000' },
+  { time: '09:00', text: 'Folketing votes 109–0' },
+  { time: '09:30', text: 'ANT opens near $105' },
+  { time: '11:30', text: 'Australian jobless rate hits 4.9%' },
+  { time: '14:00', text: 'COP31 revised draft published' },
+  { time: '15:00', text: 'Kylin Villa: the three leaders meet' },
+  { time: '16:00', text: 'Houthi attack damages the PIF tower' },
+  { time: '21:00', text: 'Trump briefs on the flight home' },
+];
 
 export const FOOTER = {
   rule: 'Disputed claims are attributed, not stated as fact.',
   sources:
-    'Reuters · AP · AFP · CNN · CNBC · The Guardian · UN News · The Hindu · CBC · ABS · Sensor Tower',
+    'Reuters · AP · AFP · BBC · CNN · CNBC · NYT · The Guardian · UN News · Al Jazeera · CBC · Bloomberg · The Hindu · ABS · Pew · Sensor Tower',
 };
